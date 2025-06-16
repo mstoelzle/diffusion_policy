@@ -1,4 +1,4 @@
-name: robodiff
+name: diffusion-policy
 channels:
   - pytorch
   - conda-forge
