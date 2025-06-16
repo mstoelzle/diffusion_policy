@@ -1,3 +1,7 @@
+import os
+# Fix for OpenMP library conflict on macOS after PyTorch update
+os.environ['KMP_DUPLICATE_LIB_OK'] = 'TRUE'
+
 import numpy as np
 import click
 from diffusion_policy.common.replay_buffer import ReplayBuffer

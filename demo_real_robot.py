@@ -16,6 +16,10 @@ Press "Backspace" to delete the previously recorded episode.
 """
 
 # %%
+import os
+# Fix for OpenMP library conflict on macOS after PyTorch update
+os.environ['KMP_DUPLICATE_LIB_OK'] = 'TRUE'
+
 import time
 from multiprocessing.managers import SharedMemoryManager
 import click

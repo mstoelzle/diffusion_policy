@@ -3,6 +3,10 @@ Usage:
 python eval.py --checkpoint data/image/pusht/diffusion_policy_cnn/train_0/checkpoints/latest.ckpt -o data/pusht_eval_output
 """
 
+import os
+# Fix for OpenMP library conflict on macOS after PyTorch update
+os.environ['KMP_DUPLICATE_LIB_OK'] = 'TRUE'
+
 import sys
 # use line-buffering for both stdout and stderr
 sys.stdout = open(sys.stdout.fileno(), mode='w', buffering=1)

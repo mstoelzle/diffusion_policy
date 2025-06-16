@@ -3,6 +3,9 @@ if __name__ == "__main__":
     import os
     import pathlib
 
+    # Fix for OpenMP library conflict on macOS after PyTorch update
+    os.environ['KMP_DUPLICATE_LIB_OK'] = 'TRUE'
+
     ROOT_DIR = str(pathlib.Path(__file__).parent.parent.parent)
     sys.path.append(ROOT_DIR)
     os.chdir(ROOT_DIR)

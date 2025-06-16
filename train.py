@@ -4,6 +4,10 @@ Training:
 python train.py --config-name=train_diffusion_lowdim_workspace
 """
 
+import os
+# Fix for OpenMP library conflict on macOS after PyTorch update
+os.environ['KMP_DUPLICATE_LIB_OK'] = 'TRUE'
+
 import sys
 # use line-buffering for both stdout and stderr
 sys.stdout = open(sys.stdout.fileno(), mode='w', buffering=1)
