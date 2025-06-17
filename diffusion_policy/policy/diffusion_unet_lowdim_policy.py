@@ -1,8 +1,9 @@
+import copy
+from einops import rearrange, reduce
 from typing import Dict
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from einops import rearrange, reduce
 from diffusers.schedulers.scheduling_ddpm import DDPMScheduler
 
 from diffusion_policy.model.common.normalizer import LinearNormalizer
@@ -188,7 +189,10 @@ class DiffusionUnetLowdimPolicy(BaseLowdimPolicy):
 
     # ========= training  ============
     def set_normalizer(self, normalizer: LinearNormalizer):
-        self.normalizer.load_state_dict(normalizer.state_dict())
+        if self.normalizer is None:
+            self.normalizer = copy.deepcopy(normalizer)
+        else:
+            self.normalizer.load_state_dict(normalizer.state_dict())
 
     def compute_loss(self, batch):
         # normalize input
