@@ -51,7 +51,32 @@ class PushTKeypointsRunner(BaseLowdimRunner):
         env_n_action_steps = n_action_steps
 
         # assert n_obs_steps <= n_action_steps
-        kp_kwargs = PushTKeypointsEnv.genenerate_keypoint_manager_params()
+        
+        # Use pre-computed keypoint parameters on macOS to avoid segmentation fault
+        import platform
+        if platform.system() == 'Darwin':  # macOS
+            # Pre-computed keypoint parameters to avoid pymunk.Space() initialization
+            import numpy as np
+            block_kps = np.array([
+                [-0.5, -1.5], [ 0.0, -1.5], [ 0.5, -1.5],
+                [-0.5,  0.0], [ 0.0,  0.0], [ 0.5,  0.0],
+                [-0.5,  1.5], [ 0.0,  1.5], [ 0.5,  1.5],
+            ], dtype=np.float32) * 30
+            agent_kps = np.array([
+                [-10.0, 0.0], [0.0, 0.0], [10.0, 0.0],
+            ], dtype=np.float32)
+            kp_kwargs = {
+                'local_keypoint_map': {
+                    'block': block_kps,
+                    'agent': agent_kps
+                },
+                'color_map': {
+                    'block': np.array([255, 0, 0], dtype=np.uint8),
+                    'agent': np.array([0, 255, 0], dtype=np.uint8),
+                }
+            }
+        else:
+            kp_kwargs = PushTKeypointsEnv.genenerate_keypoint_manager_params()
 
         def env_fn():
             return MultiStepWrapper(
