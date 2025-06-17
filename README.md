@@ -126,15 +126,24 @@ Grab config file for the corresponding experiment:
 
 ### Running for a single seed
 Activate conda environment and login to [wandb](https://wandb.ai) (if you haven't already).
+
 ```console
 [diffusion_policy]$ conda activate diffusion-policy
 (diffusion-policy)[diffusion_policy]$ wandb login
 ```
 
-Launch training with seed 42 on GPU 0.
+Launch the training of the image diffusion policy on the pusht dataset with seed 42 on GPU 0.
+
 ```console
 (diffusion-policy)[diffusion_policy]$ python train.py --config-dir=. --config-name=image_pusht_diffusion_policy_cnn.yaml training.seed=42 training.device=cuda:0 hydra.run.dir='data/outputs/${now:%Y.%m.%d}/${now:%H.%M.%S}_${name}_${task_name}'
 ```
+
+or alternatively the training of the low dim diffusion policy on the pusht dataset with seed 42 on the MPS device (Apple Silicon GPU):
+
+```console
+(diffusion-policy)[diffusion_policy]$ python train.py --config-name=train_diffusion_unet_lowdim_workspace training.seed=42 training.device=mps hydra.run.dir='data/outputs/${now:%Y.%m.%d}/${now:%H.%M.%S}_${name}_${task_name}'
+```
+
 
 This will create a directory in format `data/outputs/yyyy.mm.dd/hh.mm.ss_<method_name>_<task_name>` where configs, logs and checkpoints are written to. The policy will be evaluated every 50 epochs with the success rate logged as `test/mean_score` on wandb, as well as videos for some rollouts.
 ```console
