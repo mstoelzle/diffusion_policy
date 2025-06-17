@@ -39,7 +39,7 @@ class DiffusionUnetLowdimPolicy(BaseLowdimPolicy):
             fix_obs_steps=True,
             action_visible=False
         )
-        self.normalizer = LinearNormalizer()
+        self.normalizer = None
         self.horizon = horizon
         self.obs_dim = obs_dim
         self.action_dim = action_dim
@@ -104,7 +104,10 @@ class DiffusionUnetLowdimPolicy(BaseLowdimPolicy):
 
         assert 'obs' in obs_dict
         assert 'past_action' not in obs_dict # not implemented yet
-        nobs = self.normalizer['obs'].normalize(obs_dict['obs'])
+        if self.normalizer is not None:
+            nobs = self.normalizer['obs'].normalize(obs_dict['obs'])
+        else:
+            nobs = obs_dict['obs']
         B, _, Do = nobs.shape
         To = self.n_obs_steps
         assert Do == self.obs_dim
@@ -152,7 +155,10 @@ class DiffusionUnetLowdimPolicy(BaseLowdimPolicy):
         
         # unnormalize prediction
         naction_pred = nsample[...,:Da]
-        action_pred = self.normalizer['action'].unnormalize(naction_pred)
+        if self.normalizer is not None:
+            action_pred = self.normalizer['action'].unnormalize(naction_pred)
+        else:
+            action_pred = naction_pred
 
         # get action
         if self.pred_action_steps_only:
@@ -170,7 +176,11 @@ class DiffusionUnetLowdimPolicy(BaseLowdimPolicy):
         }
         if not (self.obs_as_local_cond or self.obs_as_global_cond):
             nobs_pred = nsample[...,Da:]
-            obs_pred = self.normalizer['obs'].unnormalize(nobs_pred)
+            # unnormalize observation prediction
+            if self.normalizer is not None:
+                obs_pred = self.normalizer['obs'].unnormalize(nobs_pred)
+            else:
+                obs_pred = nobs_pred
             action_obs_pred = obs_pred[:,start:end]
             result['action_obs_pred'] = action_obs_pred
             result['obs_pred'] = obs_pred
@@ -183,7 +193,10 @@ class DiffusionUnetLowdimPolicy(BaseLowdimPolicy):
     def compute_loss(self, batch):
         # normalize input
         assert 'valid_mask' not in batch
-        nbatch = self.normalizer.normalize(batch)
+        if self.normalizer is not None:
+            nbatch = self.normalizer.normalize(batch)
+        else:
+            nbatch = batch
         obs = nbatch['obs']
         action = nbatch['action']
 
