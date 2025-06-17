@@ -1,0 +1,56 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "diffusion_policy"
+dynamic = ["version"]
+description = "Diffusion Policy for Visuomotor Policy Learning"
+authors = [
+    {name = "Cheng Chi", email = "cheng.chi@columbia.edu"},
+    {name = "Siyuan Feng", email = "siyuan.feng@tri.global"},
+    {name = "Yilun Du", email = "yilundu@mit.edu"},
+    {name = "Zhenjia Xu", email = "zhenjia.xu@columbia.edu"},
+    {name = "Eric Cousineau", email = "eric.cousineau@tri.global"},
+    {name = "Benjamin Burchfiel", email = "benjamin.burchfiel@tri.global"},
+    {name = "Shuran Song", email = "shurans@cs.columbia.edu"}
+]
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+keywords = ["diffusion", "policy", "robotics", "machine-learning", "visuomotor"]
+dependencies = [
+    "diffusers>=0.11.1",
+    "einops>=0.4.1",
+    "numpy>=1.23.3",
+    "torch>=1.12.1",
+]
+
+[project.urls]
+Homepage = "https://diffusion-policy.cs.columbia.edu/"
+Repository = "https://github.com/real-stanford/diffusion_policy"
+Documentation = "https://diffusion-policy.cs.columbia.edu/"
+"Paper" = "https://diffusion-policy.cs.columbia.edu/#paper"
+"Data" = "https://diffusion-policy.cs.columbia.edu/data/"
+
+[project.optional-dependencies]
+dev = []
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["diffusion_policy*"]
